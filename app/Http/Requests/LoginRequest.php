@@ -5,8 +5,10 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use App\User;
+use App\Rules\UserPassword;
 
-class RegisterRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +27,12 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
     {
-        
+        $this->user = User::where('username', $this->username)->first();
+        $pass       = $this->user ? $this->user->password : null;
+
         return [
-            'name'      => 'required',
-            'username'  => 'required|unique:users',
-            'email'     => 'required|email|unique:users',
-            'password'  => 'required'
+            'username' => 'required|exists:users',
+            'password' => ['required', new UserPassword($pass)]
         ];
     }
 
@@ -48,5 +50,4 @@ class RegisterRequest extends FormRequest
             ], 400
         ));
     }
-
 }

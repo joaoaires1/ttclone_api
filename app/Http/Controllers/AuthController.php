@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 use App\Http\Resources\RegisterResource;
+use App\Http\Resources\LoginResource;
+
 use App\User;
 
 class AuthController extends Controller
@@ -30,9 +33,20 @@ class AuthController extends Controller
         return new RegisterResource($user);
     }
 
-    public function login()
+    /**
+     * @api {POST} /api/login
+     * Login user account after request validations
+     * 
+     * @return json
+     */
+    public function login(LoginRequest $request)
     {
-        
+        $user = $request->user;
+        $user->api_token = generateToken();
+        $user->api_token_expiry = generateTokenExpiry();
+        $user->save();
+
+        return new LoginResource($user);
     }
 
     public function logout()
