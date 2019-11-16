@@ -16,6 +16,7 @@ class RegisterResource extends JsonResource
     {
         return [
             "success"   => true,
+            "id"        => $this["id"],
             "name"      => $this["name"],
             "username"  => $this["username"],
             "email"     => $this["email"],

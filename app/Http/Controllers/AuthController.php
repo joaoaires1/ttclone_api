@@ -49,8 +49,19 @@ class AuthController extends Controller
         return new LoginResource($user);
     }
 
-    public function logout()
+    /**
+     * @api {POST} /api/logout
+     * Logged out user account
+     * 
+     * @return json
+     */
+    public function logout(Request $request)
     {
-        
+        $user = $request->user;
+        $user->api_token = null;
+        $user->api_token_expiry = null;
+        $user->save();
+
+        return response()->json(["success" => true], 200);
     }
 }

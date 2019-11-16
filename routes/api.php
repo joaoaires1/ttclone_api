@@ -24,3 +24,7 @@ Route::get('/hello', function () {
 
 Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');
+
+Route::middleware('auth_token')->group(function () {
+    Route::post('/logout', 'AuthController@logout');
+});
