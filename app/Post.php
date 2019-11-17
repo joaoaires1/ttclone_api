@@ -36,4 +36,22 @@ class Post extends Model
                 ->with('user')
                 ->first();
     }
+
+    /**
+     * Get posts to timeline
+     * 
+     * @param array $followedIds
+     * @param int $userId
+     * @return collection
+     */
+    public function getTimeLinePosts ($followedIds, $userId)
+    {
+        $posts = self::whereIn('user_id', $followedIds)
+                        ->orWhere('user_id', $userId)
+                        ->orderBy('id', 'desc')
+                        ->with('user')
+                        ->get();
+                        
+        return $posts;
+    }
 }

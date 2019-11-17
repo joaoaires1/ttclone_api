@@ -38,4 +38,24 @@ class Follower extends Model
                 ->where("followed_id", $followedId)
                 ->first();
     }
+
+    /**
+     * Return an array with ids at this user follows
+     * 
+     * @return array
+     */
+    public function getFollowedUsers ($userId)
+    {
+        $followedIds = array();
+        
+        $followed = self::where("follower_id", $userId)
+                    ->select("followed_id")
+                    ->get();
+
+        foreach ($followed as $follow) {
+            array_push($followedIds, $follow->followed_id);
+        }
+
+        return $followedIds;
+    }
 }

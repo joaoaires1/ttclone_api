@@ -30,4 +30,5 @@ Route::middleware('auth_token')->group(function () {
 
     Route::apiResource('posts', 'PostController');
     Route::apiResource('follow', 'FollowerController');
+    Route::apiResource('timeline', 'TimeLineController');
 });
