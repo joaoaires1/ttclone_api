@@ -5,23 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\StorePostResource;
+use App\Http\Resources\GetPostsResource;
 use App\Post;
+use App\User;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * 
+     * @api {GET} /api/posts
+     * @param  Request  $request
+     * @param  Post     $model
+     * @return GetPostsResource
      */
-    public function index()
+    public function index(Request $request, Post $model)
     {
-        //
+        $posts = $model->getPostsByUserId($request->user->id);
+
+        return new GetPostsResource(["posts" => $posts]);
     }
 
     /**
      * Store a newly post.
      *
+     * @api {POST} /api/posts
      * @param  StorePostRequest  $request
      * @return StorePostResource
      */
@@ -40,34 +48,55 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
+     * @api {GET} /api/posts/{id}
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Post $model
+     * @return GetPostsResource
      */
-    public function show($id)
+    public function show($id, Post $model)
     {
-        //
+        $post = $model->getPostById($id);
+
+        return new GetPostsResource(["posts" => $post]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @api {PUT} /api/posts/{id}
+     * @param  StorePostRequest  $request
      * @param  int  $id
+     * @param  Post $model
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePostRequest $request, $id, Post $model)
     {
-        //
+        $post = $model->getPostById($id);
+        $post->text = $request->text;
+        $post->save();
+
+        return new GetPostsResource(["posts" => $post]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Post $model
+     * @return json
      */
-    public function destroy($id)
+    public function destroy($id, Post $model)
     {
-        //
+        $response = array();
+        $post     = $model->getPostById($id);
+
+        if ( isset($post) ) {
+            $post->delete();
+            $response["success"] = true;
+        } else {
+            $response["success"] = false;
+        }
+            
+        return response()->json($response);
     }
 }
