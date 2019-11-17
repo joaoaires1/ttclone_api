@@ -33,7 +33,7 @@ class PostController extends Controller
      * @param  StorePostRequest  $request
      * @return StorePostResource
      */
-    public function store(StorePostRequest $request)
+    public function store(StorePostRequest $request, Post $model)
     {
         $userId = $request->user->id;
         
@@ -42,7 +42,7 @@ class PostController extends Controller
             "text"    => $request->text
         ]);
 
-        return new StorePostResource($post);
+        return new StorePostResource($model->with('user')->find($post->id));
     }
 
     /**

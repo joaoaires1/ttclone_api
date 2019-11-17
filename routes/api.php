@@ -29,4 +29,5 @@ Route::middleware('auth_token')->group(function () {
     Route::post('/logout', 'AuthController@logout');
 
     Route::apiResource('posts', 'PostController');
+    Route::apiResource('follow', 'FollowerController');
 });
