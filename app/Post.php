@@ -27,6 +27,7 @@ class Post extends Model
     {
         return self::where("user_id", $userId)
                 ->with('user')
+                ->orderBy('id', 'desc')
                 ->get();
     }
 

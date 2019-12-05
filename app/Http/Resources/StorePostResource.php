@@ -20,7 +20,7 @@ class StorePostResource extends JsonResource
             "id"        => $this["id"],
             "user_id"   => $this["user_id"],
             "text"      => $this["text"],
-            "crated_at" => Carbon::parse($this["created_at"])->toDateTimeString(),
+            "created_at" => Carbon::parse($this["created_at"])->toDateTimeString(),
             "user"      => $this["user"]
         ];
     }
