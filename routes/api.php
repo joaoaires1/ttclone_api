@@ -26,9 +26,10 @@ Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');
 
 Route::middleware('auth_token')->group(function () {
-    Route::post('/logout', 'AuthController@logout');
-
     Route::apiResource('posts', 'PostController');
     Route::apiResource('follow', 'FollowerController');
     Route::apiResource('timeline', 'TimeLineController');
+
+    Route::post('/logout', 'AuthController@logout');
+    Route::get('/search', 'SearchController@getPeoples');
 });

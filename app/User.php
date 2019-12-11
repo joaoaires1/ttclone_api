@@ -44,4 +44,11 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Post');
     }
+
+    public function searchPeoples ($name)
+    {
+        return $this->where('name', 'like', "%$name%")
+                    ->orWhere('username', 'like', "%$name%")
+                    ->get();
+    }
 }
