@@ -32,4 +32,5 @@ Route::middleware('auth_token')->group(function () {
 
     Route::post('/logout', 'AuthController@logout');
     Route::get('/search', 'SearchController@getPeoples');
+    Route::post('/edit_perfil', 'EditPerfilController@editPerfil');
 });
