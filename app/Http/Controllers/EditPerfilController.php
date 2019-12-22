@@ -19,12 +19,11 @@ class EditPerfilController extends Controller
                 $url            = url("uploads/avatar/{$avatar}.jpg");
                 $user->avatar   = $url;
 
-                Image::make($request->photo)->resize(300, 300)->save("uploads/avatar/{$avatar}.jpg");
+                Image::make($request->photo)->save("uploads/avatar/{$avatar}.jpg");
                 Image::make($request->photo)->resize(50, 50)->save("uploads/avatar/{$avatar}-mini.jpg");
             }
 
             $user->name = $request->name;
-            $user->username = $request->username;
             $user->save();
 
             return response()->json(['success' => true, 'user' => $user]);

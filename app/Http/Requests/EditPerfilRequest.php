@@ -27,7 +27,6 @@ class EditPerfilRequest extends FormRequest
     {
         return [
             'name'      => 'required',
-            'username'  => 'required|unique:users',
             'photo'     => 'image|mimes:png,jpg,jpeg'
         ];
     }
