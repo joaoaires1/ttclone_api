@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\StorePostResource;
 use App\Http\Resources\GetPostsResource;
+
+use App\Http\Requests\GetPerfilRequest;
+
 use App\Post;
 use App\User;
 
@@ -98,5 +101,18 @@ class PostController extends Controller
         }
             
         return response()->json($response);
+    }
+
+    public function getPostsByUsername(GetPerfilRequest $request, Post $post, User $user)
+    {
+        $user = $user->getUserByUsername($request->username);
+
+        if ( $user ) {
+            $post = $post->getPostsByUserId($user->id);
+            return new GetPostsResource(["posts" => $post]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+        
     }
 }

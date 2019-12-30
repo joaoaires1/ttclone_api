@@ -51,4 +51,9 @@ class User extends Authenticatable
                     ->orWhere('username', 'like', "%$name%")
                     ->get();
     }
+
+    public function getUserByUsername($username)
+    {
+        return $this->where('username', $username)->first();
+    }
 }
