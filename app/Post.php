@@ -55,4 +55,9 @@ class Post extends Model
                         
         return $posts;
     }
+
+    public function countPostsByUserId($userId)
+    {
+        return self::where('user_id', $userId)->count();
+    }
 }

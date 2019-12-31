@@ -26,6 +26,7 @@ class AuthController extends Controller
             "username"     => $request->username,
             "email"        => $request->email,
             "password"     => Hash::make($request->password),
+            "avatar"       => url("uploads/avatar/default.jpg"),
             "api_token"    => generateToken(),
             "api_token_expiry" => generateTokenExpiry()
         ]);

@@ -58,4 +58,15 @@ class Follower extends Model
 
         return $followedIds;
     }
+
+    public function getStats($userId)
+    {
+        $isFollowing = self::where('follower_id', $userId)->count();
+        $wasFollowed = self::where('followed_id', $userId)->count();
+
+        return [
+            "is_following" => $isFollowing,
+            "was_followed" => $wasFollowed
+        ];
+    }
 }
