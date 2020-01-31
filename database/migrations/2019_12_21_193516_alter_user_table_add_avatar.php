@@ -15,7 +15,6 @@ class AlterUserTableAddAvatar extends Migration
     {
         Schema::table('users', function ($table) {
             $table->string('avatar', 190)->after('username')
-                                ->unique()
                                 ->nullable()
                                 ->default(null);
         });
