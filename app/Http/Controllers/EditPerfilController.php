@@ -20,7 +20,6 @@ class EditPerfilController extends Controller
                 $user->avatar   = $url;
 
                 Image::make($request->photo)->save("uploads/avatar/{$avatar}.jpg");
-                Image::make($request->photo)->resize(50, 50)->save("uploads/avatar/{$avatar}-mini.jpg");
             }
 
             $user->name = $request->name;
