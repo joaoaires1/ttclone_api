@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\StorePostResource;
 use App\Http\Resources\GetPostsResource;
+use App\Http\Resources\PostResource;
 
 use App\Http\Requests\GetPerfilRequest;
 
@@ -26,7 +27,7 @@ class PostController extends Controller
     {
         $posts = $model->getPostsByUserId($request->user->id);
 
-        return new GetPostsResource(["posts" => $posts]);
+        return new GetPostsResource(["posts" => PostResource::collection($posts)]);
     }
 
     /**

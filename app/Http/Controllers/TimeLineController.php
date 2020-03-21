@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\GetPostsResource;
+use App\Http\Resources\PostResource;
 use App\Follower;
 use App\Post;
 
@@ -25,7 +26,7 @@ class TimeLineController extends Controller
         // Get timeline posts
         $posts       = $post->getTimeLinePosts ($followedIds, $userId);
 
-        return new GetPostsResource(["posts" => $posts]);
+        return new GetPostsResource(["posts" => PostResource::collection($posts)]);
     }
 
     /**

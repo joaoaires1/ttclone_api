@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class LoginResource extends JsonResource
+class EditPerfilResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +16,8 @@ class LoginResource extends JsonResource
     {
         return [
             "success"   => true,
-            "id"        => $this["id"],
-            "name"      => $this["name"],
-            "username"  => $this["username"],
-            "email"     => $this["email"],
-            "api_token" => $this["api_token"],
-            "avatar"    => url("img/cache/avatar/{$this["avatar"]}") 
+            "name"      => $this->name,
+            "avatar"    => url("img/cache/avatar/{$this->avatar}") 
         ];
     }
 }

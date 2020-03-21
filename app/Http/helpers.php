@@ -54,3 +54,34 @@ if (! function_exists('checkTokenExpiry')) {
         return $checkExpiry;
     }
 }
+
+/**
+ * Check if token is valid
+ * 
+ * @return boolean
+ */
+if (! function_exists('formatPostCreatedAt')) {
+    function formatPostCreatedAt($value)
+    {
+        $now    = now();
+        $createdAt = Carbon::parse($value);
+        // return $createdAt;
+        $diff = $now->diffInSeconds($createdAt);
+        $formatedDiff = '';
+        
+        if ($diff < 60) {
+            $formatedDiff = "$diff sec";
+        } else if ($now->diffInDays($createdAt) >= 1) {
+            $days = $now->diffInDays($createdAt);
+            $formatedDiff = "{$days} day's";
+        } else if ($now->diffInHours($createdAt) >= 1) {
+            $hours = $now->diffInHours($createdAt);
+            $formatedDiff = "{$hours} hour's";
+        } else if ($now->diffInMinutes($createdAt) >= 1) {
+            $min = $now->diffInMinutes($createdAt);
+            $formatedDiff = "{$min} min";
+        } 
+
+        return $formatedDiff;
+    }
+}

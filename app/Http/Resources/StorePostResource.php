@@ -20,8 +20,12 @@ class StorePostResource extends JsonResource
             "id"        => $this["id"],
             "user_id"   => $this["user_id"],
             "text"      => $this["text"],
-            "created_at" => Carbon::parse($this["created_at"])->toDateTimeString(),
-            "user"      => $this["user"]
+            "created_at" => formatPostCreatedAt($this["created_at"]),
+            "user"      => [
+                "name" => $this->user->name,
+                "username" => $this->user->username,
+                "avatar" => url("img/cache/avatar/{$this->user->avatar}")
+            ]
         ];
     }
 }
