@@ -5,7 +5,9 @@ use Carbon\Carbon;
 if (! function_exists('helloWorld')) {
     function helloWorld()
     {
-        return "Hello World!!!";
+        return response()->json([
+            'foo' => 'bar'
+        ]);
     }
 }
 
@@ -65,21 +67,21 @@ if (! function_exists('formatPostCreatedAt')) {
     {
         $now    = now();
         $createdAt = Carbon::parse($value);
-        // return $createdAt;
+        
         $diff = $now->diffInSeconds($createdAt);
         $formatedDiff = '';
         
         if ($diff < 60) {
-            $formatedDiff = "$diff sec";
+            $formatedDiff = "{$diff}s";
         } else if ($now->diffInDays($createdAt) >= 1) {
             $days = $now->diffInDays($createdAt);
-            $formatedDiff = "{$days} day's";
+            $formatedDiff = "{$days}d";
         } else if ($now->diffInHours($createdAt) >= 1) {
             $hours = $now->diffInHours($createdAt);
-            $formatedDiff = "{$hours} hour's";
+            $formatedDiff = "{$hours}h";
         } else if ($now->diffInMinutes($createdAt) >= 1) {
             $min = $now->diffInMinutes($createdAt);
-            $formatedDiff = "{$min} min";
+            $formatedDiff = "{$min}m";
         } 
 
         return $formatedDiff;
