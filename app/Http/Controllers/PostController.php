@@ -110,7 +110,7 @@ class PostController extends Controller
 
         if ( $user ) {
             $post = $post->getPostsByUserId($user->id);
-            return new GetPostsResource(["posts" => $post]);
+            return new GetPostsResource(["posts" => PostResource::collection($post)]);
         } else {
             return response()->json(['success' => false]);
         }
