@@ -16,7 +16,12 @@ class GetPostsResource extends JsonResource
     {
         return [
             "success" => true,
-            "posts"   => $this["posts"]
+            "posts"   => $this["posts"],
+            "user"    => [
+                "name" => $this["user"]->name,
+                "username" => $this["user"]->username,
+                "avatar" => url("img/cache/avatar/{$this["user"]->avatar}")
+            ]
         ];
     }
 }
