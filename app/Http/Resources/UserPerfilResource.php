@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GetPostsResource extends JsonResource
+class UserPerfilResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,12 @@ class GetPostsResource extends JsonResource
     {
         return [
             "success" => true,
-            "posts"   => $this["posts"]
+            "posts"   => $this["posts"],
+            "user"    => [
+                "name" => $this['user']->name,
+                "username" => $this['user']->username,
+                "avatar" => url("img/cache/avatar/{$this['user']->avatar}")
+            ]
         ];
     }
 }

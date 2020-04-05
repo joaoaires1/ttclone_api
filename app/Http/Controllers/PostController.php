@@ -7,6 +7,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\StorePostResource;
 use App\Http\Resources\GetPostsResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\UserPerfilResource;
 
 use App\Http\Requests\GetPerfilRequest;
 
@@ -110,7 +111,7 @@ class PostController extends Controller
 
         if ( $user ) {
             $post = $post->getPostsByUserId($user->id);
-            return new GetPostsResource(["posts" => PostResource::collection($post), "user" => $user]);
+            return new UserPerfilResource(["posts" => PostResource::collection($post), "user" => $user]);
         } else {
             return response()->json(['success' => false]);
         }
