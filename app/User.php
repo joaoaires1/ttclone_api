@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Follower;
 
 class User extends Authenticatable
 {
@@ -52,8 +53,18 @@ class User extends Authenticatable
                     ->get();
     }
 
-    public function getUserByUsername($username)
+    public function getUserByUsername($username, $user = null)
     {
-        return $this->where('username', $username)->first();
+        $perfil = $this->where('username', $username)->first();
+
+        if ($perfil) {
+            $following = new Follower;
+            $isFollowing = $following->followerInstance($perfil->id, $user->id);
+            $perfil->is_following = $isFollowing ? true : false;
+            $perfil->own_perfil = $perfil->id == $user->id;
+        }
+        
+
+        return $perfil;
     }
 }

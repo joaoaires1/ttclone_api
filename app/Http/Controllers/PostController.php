@@ -107,8 +107,8 @@ class PostController extends Controller
 
     public function getPostsByUsername(GetPerfilRequest $request, Post $post, User $user)
     {
-        $user = $user->getUserByUsername($request->username);
-
+        $user = $user->getUserByUsername($request->username, $request->user);
+        
         if ( $user ) {
             $post = $post->getPostsByUserId($user->id);
             return new UserPerfilResource(["posts" => PostResource::collection($post), "user" => $user]);
