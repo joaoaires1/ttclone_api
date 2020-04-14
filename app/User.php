@@ -59,7 +59,7 @@ class User extends Authenticatable
 
         if ($perfil) {
             $following = new Follower;
-            $isFollowing = $following->followerInstance($perfil->id, $user->id);
+            $isFollowing = $following->followerInstance($user->id, $perfil->id);
             $perfil->is_following = $isFollowing ? true : false;
             $perfil->own_perfil = $perfil->id == $user->id;
         }
