@@ -18,6 +18,7 @@ class UserPerfilResource extends JsonResource
             "success" => true,
             "posts"   => $this["posts"],
             "user"    => [
+                "id" => $this['user']->id,
                 "name" => $this['user']->name,
                 "username" => $this['user']->username,
                 "avatar" => url("img/cache/avatar/{$this['user']->avatar}"),
