@@ -21,7 +21,7 @@ class SearchController extends Controller
 
     public function getPerfil(GetPerfilRequest $request, User $user, Follower $follower, Post $post)
     {
-        $user = $user->getUserByUsername($request->username);
+        $user = $user->getUserByUsername($request->username, $request->user);
         
         $data = [];
 
