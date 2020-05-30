@@ -30,6 +30,7 @@ class SearchController extends Controller
 
             $data['success'] = true;
             $data['user']    = [
+                'id' => $user->id,
                 'name' => $user->name,
                 'username' => $user->username,
                 'avatar' => url("img/cache/avatar/{$user->avatar}"),
