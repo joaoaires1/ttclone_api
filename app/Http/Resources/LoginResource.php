@@ -21,6 +21,7 @@ class LoginResource extends JsonResource
             "username"  => $this["username"],
             "email"     => $this["email"],
             "api_token" => $this["api_token"],
+            "access"    => $this["access"],
             "avatar"    => url("img/cache/avatar/{$this["avatar"]}") 
         ];
     }

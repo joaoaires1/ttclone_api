@@ -47,6 +47,8 @@ class AuthController extends Controller
         $user->api_token_expiry = generateTokenExpiry();
         $user->save();
 
+        $user->access = $user->createToken('Token Name')->accessToken;
+
         return new LoginResource($user);
     }
 
