@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 use App\Follower;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +39,52 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Find the user instance for the given username.
+     *
+     * @param  string  $username
+     * @return \App\User
+     */
+    public function findForPassport($username)
+    {
+        return $this->where('username', $username)->first();
+    }
+
+    /**
+     * Register new user
+     * @param object $request
+     * @return User
+     */
+    public function userRegister($request)
+    {
+        return self::create([
+            "name"         => $request->name,
+            "username"     => $request->username,
+            "email"        => $request->email,
+            "password"     => Hash::make($request->password),
+            "avatar"       => "default.jpg",
+            "api_token"    => generateToken(),
+            "api_token_expiry" => generateTokenExpiry()
+        ]);
+    }
+
+    /**
+     * User sign in
+     * @param object $request
+     * @return User
+     */
+    public function userSignIn($request)
+    {
+        $user = $request->user;
+        $user->api_token = generateToken();
+        $user->api_token_expiry = generateTokenExpiry();
+        $user->save();
+
+        $user->access = $user->createToken('Token Name')->accessToken;
+
+        return $user;
+    }
 
     /**
      * Get all posts of an user.
