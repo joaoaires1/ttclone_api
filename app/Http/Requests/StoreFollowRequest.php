@@ -27,6 +27,8 @@ class StoreFollowRequest extends FormRequest
      */
     public function rules()
     {
+        $this->user = $this->user();
+
         return [
             "followed_id" => ["required", new CheckFollowedId($this->user->id)],
         ];

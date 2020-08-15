@@ -25,9 +25,9 @@ Route::get('/hello', function (Request $request) {
 Route::post('/register', 'api\auth\RegisterController@register');
 Route::post('/login', 'api\auth\SignInController@signIn');
 
-Route::middleware('auth_token')->group(function () {
+Route::middleware('auth:api')->group(function () {
+    Route::post('/follow', 'api\follow\FollowController@store');
     Route::apiResource('posts', 'PostController');
-    Route::apiResource('follow', 'FollowerController');
     Route::apiResource('timeline', 'TimeLineController');
 
     Route::post('/logout', 'AuthController@logout');

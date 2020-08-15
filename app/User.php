@@ -41,37 +41,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Find the user instance for the given username.
-     *
-     * @param  string  $username
-     * @return \App\User
-     */
-    public function findForPassport($username)
-    {
-        return $this->where('username', $username)->first();
-    }
-
-    /**
-     * Get user for test
-     * @return User
-     */
-    public static function userForTest()
-    {
-        $test = self::whereEmail("usertest@test.com")->first();
-
-        if ($test)
-            return $test;
-
-        return self::create([
-            "name"         => "User Test",
-            "username"     => "usertest",
-            "email"        => "usertest@test.com",
-            "password"     => Hash::make("qweqwe"),
-            "avatar"       => "default.jpg"
-        ]);
-    }
-
-    /**
      * Register new user
      * @param object $request
      * @return User

@@ -69,4 +69,19 @@ class Follower extends Model
             "was_followed" => $wasFollowed
         ];
     }
+
+    /**
+     * Store new follow
+     * @param StoreFollowRequest $request
+     * @return boolean
+     */
+    public function storeFollow($request)
+    {
+        $follow = Follower::create([
+            'follower_id' => (int) $request->user->id,
+            'followed_id' => (int) $request->followed_id 
+        ]);
+
+        return $follow ? true : false;
+    }
 }
