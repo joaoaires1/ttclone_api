@@ -52,6 +52,26 @@ class User extends Authenticatable
     }
 
     /**
+     * Get user for test
+     * @return User
+     */
+    public static function userForTest()
+    {
+        $test = self::whereEmail("usertest@test.com")->first();
+
+        if ($test)
+            return $test;
+
+        return self::create([
+            "name"         => "User Test",
+            "username"     => "usertest",
+            "email"        => "usertest@test.com",
+            "password"     => Hash::make("qweqwe"),
+            "avatar"       => "default.jpg"
+        ]);
+    }
+
+    /**
      * Register new user
      * @param object $request
      * @return User
@@ -63,9 +83,7 @@ class User extends Authenticatable
             "username"     => $request->username,
             "email"        => $request->email,
             "password"     => Hash::make($request->password),
-            "avatar"       => "default.jpg",
-            "api_token"    => generateToken(),
-            "api_token_expiry" => generateTokenExpiry()
+            "avatar"       => "default.jpg"
         ]);
     }
 
@@ -74,16 +92,9 @@ class User extends Authenticatable
      * @param object $request
      * @return User
      */
-    public function userSignIn($request)
+    public function userSignIn()
     {
-        $user = $request->user;
-        $user->api_token = generateToken();
-        $user->api_token_expiry = generateTokenExpiry();
-        $user->save();
-
-        $user->access = $user->createToken('Token Name')->accessToken;
-
-        return $user;
+        $this->access = $this->createToken('auth_token')->accessToken;
     }
 
     /**

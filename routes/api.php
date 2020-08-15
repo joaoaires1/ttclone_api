@@ -23,7 +23,7 @@ Route::get('/hello', function (Request $request) {
 })->middleware('auth:api');
 
 Route::post('/register', 'api\auth\RegisterController@register');
-Route::post('/login', 'AuthController@login');
+Route::post('/login', 'api\auth\SignInController@signIn');
 
 Route::middleware('auth_token')->group(function () {
     Route::apiResource('posts', 'PostController');
