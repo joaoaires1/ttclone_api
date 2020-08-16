@@ -30,6 +30,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/unfollow', 'api\follow\UnfollowController@destroy');
 
     Route::get('/posts', 'api\posts\GetPostsController@index');
+    Route::post('/posts', 'api\posts\StorePostController@store');
     
     Route::apiResource('timeline', 'TimeLineController');
 

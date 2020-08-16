@@ -25,6 +25,7 @@ class StorePostRequest extends FormRequest
      */
     public function rules()
     {
+        $this->user = $this->user();
         return [
             "text" => 'required|string|max:140'
         ];

@@ -17,14 +17,14 @@ class StorePostResource extends JsonResource
     {
         return [
             "success"   => true,
-            "id"        => $this["id"],
-            "user_id"   => $this["user_id"],
-            "text"      => $this["text"],
-            "created_at" => formatPostCreatedAt($this["created_at"]),
+            "id"        => $this['post']["id"],
+            "user_id"   => $this['post']["user_id"],
+            "text"      => $this['post']["text"],
+            "created_at" => formatPostCreatedAt($this['post']["created_at"]),
             "user"      => [
-                "name" => $this->user->name,
-                "username" => $this->user->username,
-                "avatar" => url("img/cache/avatar/{$this->user->avatar}")
+                "name" => $this['user']['name'],
+                "username" => $this['user']['username'],
+                "avatar" => url("img/cache/avatar/{$this['user']['avatar']}")
             ]
         ];
     }

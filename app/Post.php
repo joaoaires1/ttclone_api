@@ -101,4 +101,19 @@ class Post extends Model
                 ->following($request->user->id)
                 ->paginate(15);
     }
+
+    /**
+     * Store new post
+     * @param StorePostRequest $request
+     * @return Post
+     */
+    public function storePost($request)
+    {
+        $post = new Post;
+        $post->user_id = $request->user_id;
+        $post->text = $request->text;
+        $post->save();
+        
+        return $post;
+    }
 }
