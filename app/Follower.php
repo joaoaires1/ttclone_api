@@ -34,9 +34,21 @@ class Follower extends Model
      */
     public function followerInstance ($followerId, $followedId)
     {
-        return self::where("follower_id", $followerId)
+        return (boolean) self::where("follower_id", $followerId)
                 ->where("followed_id", $followedId)
-                ->first();
+                ->count();
+    }
+
+    /**
+     * Check if an user follow other user
+     * 
+     * @return collection
+     */
+    public static function hasFollow ($followerId, $followedId)
+    {
+        return (boolean) self::where("follower_id", $followerId)
+                ->where("followed_id", $followedId)
+                ->count();
     }
 
     /**

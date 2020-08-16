@@ -95,4 +95,17 @@ class User extends Authenticatable
 
         return $perfil;
     }
+
+    /**
+     * Set needed info for this perfil
+     * @param GetPostsRequest $request
+     * @return User
+     */
+    public function perfilInfo($request)
+    {
+        $user = $request->user();
+        $this->own_perfil = $user->id == $this->id;
+        $this->is_following = Follower::hasFollow($user->id, $this->id);
+        return $this;
+    }
 }

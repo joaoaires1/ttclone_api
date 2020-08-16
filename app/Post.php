@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 
 class Post extends Model
 {
@@ -59,5 +60,45 @@ class Post extends Model
     public function countPostsByUserId($userId)
     {
         return self::where('user_id', $userId)->count();
+    }
+
+    /**
+     * Scope query for posts in timeline
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param int $userId
+     * @return $query
+     */
+    public function scopeFollowing($query, $userId)
+    {
+        return $query->orWhereIn(
+            'user_id', 
+            Follower::where('follower_id', $userId)
+                    ->pluck('followed_id')
+        );
+    }
+
+    /**
+     * Get posts for timeline or perfil
+     * @param GetPostsRequest $request
+     * @return Paginator
+     */
+    public function getPosts($request)
+    {
+        $posts = $this->where('user_id', $request->user->id)
+                    ->orderBy('id', 'desc')
+                    ->with('user');
+
+        $currentPage = $request->page;
+
+        Paginator::currentPageResolver(function () use ($currentPage) {
+            return $currentPage;
+        });
+
+        if ($request->perfil_page)
+            return $posts->paginate(15);
+        
+        return $posts
+                ->following($request->user->id)
+                ->paginate(15);
     }
 }
