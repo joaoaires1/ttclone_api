@@ -84,4 +84,16 @@ class Follower extends Model
 
         return $follow ? true : false;
     }
+
+    /**
+     * Delete an follow register
+     * @param UnfollowRequest
+     * @return boolean
+     */
+    public function deleteFollow($request)
+    {
+        return self::where('follower_id', $request->user->id)
+                    ->Where('followed_id', $request->followed_id)
+                    ->delete();
+    }
 }

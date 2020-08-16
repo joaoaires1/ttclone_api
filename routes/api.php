@@ -27,6 +27,8 @@ Route::post('/login', 'api\auth\SignInController@signIn');
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/follow', 'api\follow\FollowController@store');
+    Route::delete('/unfollow', 'api\follow\UnfollowController@destroy');
+    
     Route::apiResource('posts', 'PostController');
     Route::apiResource('timeline', 'TimeLineController');
 

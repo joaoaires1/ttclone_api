@@ -11,7 +11,7 @@ use Tests\TestCase;
 class UserSignInTest extends TestCase
 {
     /**
-     * A basic feature test example.
+     * A test for user sign in
      *
      * @return void
      */

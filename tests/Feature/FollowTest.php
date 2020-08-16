@@ -10,7 +10,7 @@ use Tests\TestCase;
 class FollowTest extends TestCase
 {
     /**
-     * A basic feature test example.
+     * Test follow feature
      *
      * @return void
      */
@@ -38,6 +38,28 @@ class FollowTest extends TestCase
         ]);
 
         $response2->assertStatus(400);
+    }
+
+    /**
+     * Test unfollow feature
+     * 
+     * @return void
+     */
+    public function testUnfollow()
+    {
+        $user = UserSignInTest::userForTest();
+        $user->userSignIn();
+        
+        $userToFollow = UserSignInTest::userForTest(true);
+        
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $user['access']
+        ])->delete('/api/unfollow', [
+            'followed_id' => $userToFollow->id
+        ]);
+
+        $response->assertStatus(200);
     }
 
 }
