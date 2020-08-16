@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -53,8 +54,30 @@ class PostsTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * Test delete post
+     */
     public function testDeletePost()
     {
+        $user = UserSignInTest::userForTest();
+        $user->userSignIn();
         
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $user['access']
+        ])->json('DELETE', '/api/posts', [
+            'post_id' => Post::whereUserId($user->id)->first()->id
+        ]);
+        
+        $response->assertStatus(200);
+
+        $response2 = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $user['access']
+        ])->json('DELETE', '/api/posts', [
+            'post_id' => Post::where('user_id', '<>',$user->id)->first()->id
+        ]);
+        
+        $response2->assertStatus(400);
     }
 }

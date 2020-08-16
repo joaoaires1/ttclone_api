@@ -31,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/posts', 'api\posts\GetPostsController@index');
     Route::post('/posts', 'api\posts\StorePostController@store');
+    Route::delete('/posts', 'api\posts\DeletePostController@destroy');
     
     Route::apiResource('timeline', 'TimeLineController');
 

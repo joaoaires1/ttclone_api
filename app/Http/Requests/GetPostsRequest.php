@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\User;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class GetPostsRequest extends FormRequest
 {
@@ -44,5 +46,20 @@ class GetPostsRequest extends FormRequest
         $this->merge([
             'user' => $this->user
         ]);
+    }
+
+    /**
+     * Return error if validation fail
+     *
+     * @return Json
+     */     
+    protected function failedValidation(Validator $validator) {
+        throw new HttpResponseException(
+        response()->json(
+            [
+                'success' => false,
+                'errors' => $validator->errors()->all()
+            ], 400
+        ));
     }
 }

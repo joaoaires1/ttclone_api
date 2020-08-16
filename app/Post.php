@@ -116,4 +116,14 @@ class Post extends Model
         
         return $post;
     }
+
+    /**
+     * Delete a post
+     * @param int $postId
+     * @return boolean
+     */
+    public function deletePost($postId)
+    {
+        return (boolean) self::find($postId)->delete();
+    }
 }

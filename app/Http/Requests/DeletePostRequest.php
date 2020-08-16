@@ -2,11 +2,13 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator as ValidationValidator;
+use App\Post;
+use App\Rules\CheckPostAuthor;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UnfollowRequest extends FormRequest
+class DeletePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +27,31 @@ class UnfollowRequest extends FormRequest
      */
     public function rules()
     {
-        $this->user = $this->user();
-
+        $user = $this->user();
         return [
-            "followed_id" => "required"
+            'post' => 'required',
+            'post_id' => [
+                'required', 
+                new CheckPostAuthor(
+                    $this->post ? $this->post->user_id : null,
+                    $user->id
+                )
+            ]
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->post = Post::find($this->post_id);
+        
+        $this->merge([
+            'post' => $this->post
+        ]);
     }
 
     /**
@@ -37,7 +59,7 @@ class UnfollowRequest extends FormRequest
      *
      * @return Json
      */     
-    protected function failedValidation(ValidationValidator $validator) {
+    protected function failedValidation(Validator $validator) {
         throw new HttpResponseException(
         response()->json(
             [
