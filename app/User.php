@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Follower;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -97,6 +98,28 @@ class User extends Authenticatable
         $this->own_perfil = $user->id == $this->id;
         $this->is_following = Follower::hasFollow($user->id, $this->id);
         $this->stats = Follower::getStats($this->id);
+        return $this;
+    }
+
+    /**
+     * Update user perfil
+     * @param EditPerfilRequest $request
+     * @return User
+     */
+    public function updatePerfil($request)
+    {
+        if ( $request->photo ) {
+            $avatar         = Str::random(30);
+            $this->avatar   = "{$avatar}.jpg";
+
+            $request->file('photo')->move(
+                public_path() . '/uploads/avatar',
+                "{$avatar}.jpg"
+            );
+        }
+        $this->name = $request->name;
+        $this->save();
+
         return $this;
     }
 }

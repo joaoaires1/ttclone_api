@@ -34,5 +34,5 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/posts', 'api\posts\DeletePostController@destroy');
 
     Route::get('/search', 'api\perfil\SearchController@index');
-    Route::post('/edit_perfil', 'EditPerfilController@editPerfil');
+    Route::put('/edit_perfil', 'api\perfil\EditController@update');
 });

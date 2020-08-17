@@ -16,8 +16,8 @@ class EditPerfilResource extends JsonResource
     {
         return [
             "success"   => true,
-            "name"      => $this->name,
-            "avatar"    => url("img/cache/avatar/{$this->avatar}") 
+            "name"      => $this['user']['name'],
+            "avatar"    => url("img/cache/avatar/{$this['user']['avatar']}") 
         ];
     }
 }

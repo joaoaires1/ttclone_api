@@ -25,6 +25,8 @@ class EditPerfilRequest extends FormRequest
      */
     public function rules()
     {
+        $this->user = $this->user();
+
         return [
             'name'      => 'required',
             'photo'     => 'image|mimes:png,jpg,jpeg'
