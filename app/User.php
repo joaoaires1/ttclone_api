@@ -74,26 +74,16 @@ class User extends Authenticatable
         return $this->hasMany('App\Post');
     }
 
+    /**
+     * Search users by name or username
+     * @param string $name
+     * @return User
+     */
     public function searchPeoples ($name)
     {
         return $this->where('name', 'like', "%$name%")
                     ->orWhere('username', 'like', "%$name%")
                     ->get();
-    }
-
-    public function getUserByUsername($username, $user = null)
-    {
-        $perfil = $this->where('username', $username)->first();
-
-        if ($perfil) {
-            $following = new Follower;
-            $isFollowing = $following->followerInstance($user->id, $perfil->id);
-            $perfil->is_following = $isFollowing ? true : false;
-            $perfil->own_perfil = $perfil->id == $user->id;
-        }
-        
-
-        return $perfil;
     }
 
     /**
@@ -106,6 +96,7 @@ class User extends Authenticatable
         $user = $request->user();
         $this->own_perfil = $user->id == $this->id;
         $this->is_following = Follower::hasFollow($user->id, $this->id);
+        $this->stats = Follower::getStats($this->id);
         return $this;
     }
 }

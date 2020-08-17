@@ -32,12 +32,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/posts', 'api\posts\GetPostsController@index');
     Route::post('/posts', 'api\posts\StorePostController@store');
     Route::delete('/posts', 'api\posts\DeletePostController@destroy');
-    
-    Route::apiResource('timeline', 'TimeLineController');
 
-    Route::post('/logout', 'AuthController@logout');
     Route::get('/search', 'SearchController@getPeoples');
-    Route::get('/get_perfil', 'SearchController@getPerfil');
-    Route::get('/posts_by_username', 'PostController@getPostsByUsername');
     Route::post('/edit_perfil', 'EditPerfilController@editPerfil');
 });

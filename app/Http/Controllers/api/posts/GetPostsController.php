@@ -24,6 +24,7 @@ class GetPostsController extends Controller
         
         return new GetPostsResource([
             'posts' => PostResource::collection($posts['data']),
+            'total_posts' => $posts['total'],
             'user'  => $user
         ]);
     }

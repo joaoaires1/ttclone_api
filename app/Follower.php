@@ -28,18 +28,6 @@ class Follower extends Model
     }
 
     /**
-     * Instaciate a followership object
-     * 
-     * @return collection
-     */
-    public function followerInstance ($followerId, $followedId)
-    {
-        return (boolean) self::where("follower_id", $followerId)
-                ->where("followed_id", $followedId)
-                ->count();
-    }
-
-    /**
      * Check if an user follow other user
      * 
      * @return collection
@@ -51,27 +39,7 @@ class Follower extends Model
                 ->count();
     }
 
-    /**
-     * Return an array with ids at this user follows
-     * 
-     * @return array
-     */
-    public function getFollowedUsers ($userId)
-    {
-        $followedIds = array();
-        
-        $followed = self::where("follower_id", $userId)
-                    ->select("followed_id")
-                    ->get();
-
-        foreach ($followed as $follow) {
-            array_push($followedIds, $follow->followed_id);
-        }
-
-        return $followedIds;
-    }
-
-    public function getStats($userId)
+    public static function getStats($userId)
     {
         $isFollowing = self::where('follower_id', $userId)->count();
         $wasFollowed = self::where('followed_id', $userId)->count();
