@@ -2,11 +2,13 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Post;
+use App\Rules\CheckPostAuthor;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StorePostRequest extends FormRequest
+class DeletePostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +27,31 @@ class StorePostRequest extends FormRequest
      */
     public function rules()
     {
-        $this->user = $this->user();
+        $user = $this->user();
         return [
-            "text" => 'required|string|max:140'
+            'post' => 'required',
+            'post_id' => [
+                'required', 
+                new CheckPostAuthor(
+                    $this->post ? $this->post->user_id : null,
+                    $user->id
+                )
+            ]
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->post = Post::find($this->post_id);
+        
+        $this->merge([
+            'post' => $this->post
+        ]);
     }
 
     /**

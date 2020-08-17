@@ -11,7 +11,7 @@ class UserRegisterTest extends TestCase
     use WithFaker;
 
     /**
-     * A basic feature test example.
+     * A test for user registration
      *
      * @return void
      */

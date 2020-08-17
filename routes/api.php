@@ -23,16 +23,16 @@ Route::get('/hello', function (Request $request) {
 })->middleware('auth:api');
 
 Route::post('/register', 'api\auth\RegisterController@register');
-Route::post('/login', 'AuthController@login');
+Route::post('/login', 'api\auth\SignInController@signIn');
 
-Route::middleware('auth_token')->group(function () {
-    Route::apiResource('posts', 'PostController');
-    Route::apiResource('follow', 'FollowerController');
-    Route::apiResource('timeline', 'TimeLineController');
+Route::middleware('auth:api')->group(function () {
+    Route::post('/follow', 'api\follow\FollowController@store');
+    Route::delete('/unfollow', 'api\follow\UnfollowController@destroy');
 
-    Route::post('/logout', 'AuthController@logout');
-    Route::get('/search', 'SearchController@getPeoples');
-    Route::get('/get_perfil', 'SearchController@getPerfil');
-    Route::get('/posts_by_username', 'PostController@getPostsByUsername');
-    Route::post('/edit_perfil', 'EditPerfilController@editPerfil');
+    Route::get('/posts', 'api\posts\GetPostsController@index');
+    Route::post('/posts', 'api\posts\StorePostController@store');
+    Route::delete('/posts', 'api\posts\DeletePostController@destroy');
+
+    Route::get('/search', 'api\perfil\SearchController@index');
+    Route::put('/edit_perfil', 'api\perfil\EditController@update');
 });

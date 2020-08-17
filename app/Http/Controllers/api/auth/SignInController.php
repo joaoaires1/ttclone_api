@@ -5,7 +5,6 @@ namespace App\Http\Controllers\api\auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\LoginResource;
-use App\User;
 
 class SignInController extends Controller
 {
@@ -15,10 +14,12 @@ class SignInController extends Controller
      * 
      * @return json
      */
-    public function signIn(LoginRequest $request, User $user)
-    {
-        return new LoginResource(
-            $user->userSignIn($request)
-        );
+    public function signIn(LoginRequest $request)
+    {   
+        $request->user->userSignIn();
+        
+        return new LoginResource([
+            "user" => $request->user
+        ]);
     }
 }

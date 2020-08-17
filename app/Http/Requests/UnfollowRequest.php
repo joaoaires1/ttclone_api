@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator as ValidationValidator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StorePostRequest extends FormRequest
+class UnfollowRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,8 +26,9 @@ class StorePostRequest extends FormRequest
     public function rules()
     {
         $this->user = $this->user();
+
         return [
-            "text" => 'required|string|max:140'
+            "followed_id" => "required"
         ];
     }
 
@@ -36,7 +37,7 @@ class StorePostRequest extends FormRequest
      *
      * @return Json
      */     
-    protected function failedValidation(Validator $validator) {
+    protected function failedValidation(ValidationValidator $validator) {
         throw new HttpResponseException(
         response()->json(
             [

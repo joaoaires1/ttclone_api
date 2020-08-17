@@ -16,13 +16,12 @@ class LoginResource extends JsonResource
     {
         return [
             "success"   => true,
-            "id"        => $this["id"],
-            "name"      => $this["name"],
-            "username"  => $this["username"],
-            "email"     => $this["email"],
-            "api_token" => $this["api_token"],
-            "access"    => $this["access"],
-            "avatar"    => url("img/cache/avatar/{$this["avatar"]}") 
+            "id"        => $this["user"]["id"],
+            "name"      => $this["user"]["name"],
+            "username"  => $this["user"]["username"],
+            "email"     => $this["user"]["email"],
+            "access"    => $this["user"]["access"],
+            "avatar"    => url("img/cache/avatar/{$this["user"]["avatar"]}") 
         ];
     }
 }

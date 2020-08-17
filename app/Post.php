@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 
 class Post extends Model
 {
@@ -23,41 +24,68 @@ class Post extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function getPostsByUserId ($userId)
+    /**
+     * Scope query for posts in timeline
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param int $userId
+     * @return $query
+     */
+    public function scopeFollowing($query, $userId)
     {
-        return self::where("user_id", $userId)
-                ->with('user')
-                ->orderBy('id', 'desc')
-                ->get();
-    }
-
-    public function getPostById ($id)
-    {
-        return self::where('id', $id)
-                ->with('user')
-                ->first();
+        return $query->orWhereIn(
+            'user_id', 
+            Follower::where('follower_id', $userId)
+                    ->pluck('followed_id')
+        );
     }
 
     /**
-     * Get posts to timeline
-     * 
-     * @param array $followedIds
-     * @param int $userId
-     * @return collection
+     * Get posts for timeline or perfil
+     * @param GetPostsRequest $request
+     * @return Paginator
      */
-    public function getTimeLinePosts ($followedIds, $userId)
+    public function getPosts($request)
     {
-        $posts = self::whereIn('user_id', $followedIds)
-                        ->orWhere('user_id', $userId)
-                        ->orderBy('id', 'desc')
-                        ->with('user')
-                        ->get();
-                        
-        return $posts;
+        $posts = $this->where('user_id', $request->user->id)
+                    ->orderBy('id', 'desc')
+                    ->with('user');
+
+        $currentPage = $request->page;
+
+        Paginator::currentPageResolver(function () use ($currentPage) {
+            return $currentPage;
+        });
+
+        if ($request->perfil_page)
+            return $posts->paginate(15);
+        
+        return $posts
+                ->following($request->user->id)
+                ->paginate(15);
     }
 
-    public function countPostsByUserId($userId)
+    /**
+     * Store new post
+     * @param StorePostRequest $request
+     * @return Post
+     */
+    public function storePost($request)
     {
-        return self::where('user_id', $userId)->count();
+        $post = new Post;
+        $post->user_id = $request->user_id;
+        $post->text = $request->text;
+        $post->save();
+        
+        return $post;
+    }
+
+    /**
+     * Delete a post
+     * @param int $postId
+     * @return boolean
+     */
+    public function deletePost($postId)
+    {
+        return (boolean) self::find($postId)->delete();
     }
 }

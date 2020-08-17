@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\User;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StorePostRequest extends FormRequest
+class GetPostsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +26,26 @@ class StorePostRequest extends FormRequest
      */
     public function rules()
     {
-        $this->user = $this->user();
         return [
-            "text" => 'required|string|max:140'
+            'username' => 'required',
+            'perfil_page' => 'required',
+            'page' => 'required',
+            'user' => 'required'
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->user = User::whereUsername($this->username)->first();
+        
+        $this->merge([
+            'user' => $this->user
+        ]);
     }
 
     /**

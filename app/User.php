@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Follower;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -41,17 +42,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Find the user instance for the given username.
-     *
-     * @param  string  $username
-     * @return \App\User
-     */
-    public function findForPassport($username)
-    {
-        return $this->where('username', $username)->first();
-    }
-
-    /**
      * Register new user
      * @param object $request
      * @return User
@@ -63,9 +53,7 @@ class User extends Authenticatable
             "username"     => $request->username,
             "email"        => $request->email,
             "password"     => Hash::make($request->password),
-            "avatar"       => "default.jpg",
-            "api_token"    => generateToken(),
-            "api_token_expiry" => generateTokenExpiry()
+            "avatar"       => "default.jpg"
         ]);
     }
 
@@ -74,16 +62,9 @@ class User extends Authenticatable
      * @param object $request
      * @return User
      */
-    public function userSignIn($request)
+    public function userSignIn()
     {
-        $user = $request->user;
-        $user->api_token = generateToken();
-        $user->api_token_expiry = generateTokenExpiry();
-        $user->save();
-
-        $user->access = $user->createToken('Token Name')->accessToken;
-
-        return $user;
+        $this->access = $this->createToken('auth_token')->accessToken;
     }
 
     /**
@@ -94,6 +75,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Post');
     }
 
+    /**
+     * Search users by name or username
+     * @param string $name
+     * @return User
+     */
     public function searchPeoples ($name)
     {
         return $this->where('name', 'like', "%$name%")
@@ -101,18 +87,39 @@ class User extends Authenticatable
                     ->get();
     }
 
-    public function getUserByUsername($username, $user = null)
+    /**
+     * Set needed info for this perfil
+     * @param GetPostsRequest $request
+     * @return User
+     */
+    public function perfilInfo($request)
     {
-        $perfil = $this->where('username', $username)->first();
+        $user = $request->user();
+        $this->own_perfil = $user->id == $this->id;
+        $this->is_following = Follower::hasFollow($user->id, $this->id);
+        $this->stats = Follower::getStats($this->id);
+        return $this;
+    }
 
-        if ($perfil) {
-            $following = new Follower;
-            $isFollowing = $following->followerInstance($user->id, $perfil->id);
-            $perfil->is_following = $isFollowing ? true : false;
-            $perfil->own_perfil = $perfil->id == $user->id;
+    /**
+     * Update user perfil
+     * @param EditPerfilRequest $request
+     * @return User
+     */
+    public function updatePerfil($request)
+    {
+        if ( $request->photo ) {
+            $avatar         = Str::random(30);
+            $this->avatar   = "{$avatar}.jpg";
+
+            $request->file('photo')->move(
+                public_path() . '/uploads/avatar',
+                "{$avatar}.jpg"
+            );
         }
-        
+        $this->name = $request->name;
+        $this->save();
 
-        return $perfil;
+        return $this;
     }
 }
