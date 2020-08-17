@@ -24,11 +24,6 @@ class Post extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function countPostsByUserId($userId)
-    {
-        return self::where('user_id', $userId)->count();
-    }
-
     /**
      * Scope query for posts in timeline
      * @param  \Illuminate\Database\Eloquent\Builder  $query
