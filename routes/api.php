@@ -33,6 +33,6 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/posts', 'api\posts\StorePostController@store');
     Route::delete('/posts', 'api\posts\DeletePostController@destroy');
 
-    Route::get('/search', 'SearchController@getPeoples');
+    Route::get('/search', 'api\perfil\SearchController@index');
     Route::post('/edit_perfil', 'EditPerfilController@editPerfil');
 });
