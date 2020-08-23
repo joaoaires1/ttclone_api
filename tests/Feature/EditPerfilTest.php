@@ -24,7 +24,7 @@ class EditPerfilTest extends TestCase
         $response = $this->withHeaders([
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $user['access']
-        ])->put('/api/edit_perfil', [
+        ])->post('/api/edit_perfil', [
             'name' => $user['name'],
             'photo' => $file
         ]);

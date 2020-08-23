@@ -14,14 +14,16 @@ class RegisterResource extends JsonResource
      */
     public function toArray($request)
     {
+        $this->userSignIn();
+        
         return [
             "success"   => true,
-            "id"        => $this["id"],
-            "name"      => $this["name"],
-            "username"  => $this["username"],
-            "email"     => $this["email"],
-            "api_token" => $this["api_token"],
-            "avatar"    => $this["avatar"]
+            'user'    => [
+                "access"    => $this['access'],
+                'name' => $this['name'],
+                'username' => $this['username'],
+                'avatar' => url("img/cache/avatar/{$this['avatar']}")
+            ]
         ];
     }
 }

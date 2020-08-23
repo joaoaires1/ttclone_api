@@ -28,7 +28,7 @@ class UserSignInTest extends TestCase
 
         $response2 = $this->withHeaders([
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $response['access']
+            'Authorization' => 'Bearer ' . $response['user']['access']
         ])->get('/api/hello', []);
 
         $response2->assertStatus(200);
