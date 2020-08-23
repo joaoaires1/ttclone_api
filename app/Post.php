@@ -72,7 +72,7 @@ class Post extends Model
     public function storePost($request)
     {
         $post = new Post;
-        $post->user_id = $request->user_id;
+        $post->user_id = $request->user->id;
         $post->text = $request->text;
         $post->save();
         

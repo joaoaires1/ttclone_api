@@ -47,7 +47,6 @@ class PostsTest extends TestCase
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $user['access']
         ])->json('POST', '/api/posts', [
-            'user_id' => $user['id'],
             'text' => $this->faker->realText(140)
         ]);
         
